@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de mascotas</title>
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script> 
+    {% load static %}
+    <link href="{% static 'css/estilos.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'js/funciones.js' %}"></script>
+    
+    <script>
+        $(function() 
+        {
+          $("#mi-formulario").validate({
+               rules: {
+                      email: {
+                          required: true,
+                          email: true
+                      },
+                      nom:"required",
+                      rut:"required",
+                      password: "required",
+                      fono: "required",
+                      opcion:"required",
+                      ubi:"required",
+                      fecha: "required",  
+                      
+                  }, //rules
+              messages: {
+                 nom: {
+                      required: 'Ingresa tu Nombre Completo',
+                      minlength: 'Formato de Nombre no válido'
+                  },
+                  rut: {
+                      required: 'Ingresa Rut Válido',
+                      minlength: 'Formato de Rut no válido'
+                  },
+                  email: {
+                      required: 'Ingresa tu correo electrónico',
+                      email: 'Formato de correo no válido'
+                  },
+                  password: {
+                      required: 'Ingresa una contraseña',
+                      minlength: 'Caracteres insuficientes'
+                  },
+                  fono:{
+                      required: 'Ingrese un número de celular',
+                      minlength: 'Cantidad de digitos insuficiente'
+                  },
+                  opcion:{
+                    required: 'Ingrese una opción',
+                    minlength: 'No selecciono ninguna opción'
+                  },
+                  ubi:{
+                    required: 'Ingrese su dirección',
+                    minlength: 'No ha ingresado dirección alguna'
+                  },
+                  fecha:{
+                      required: 'Seleccione una fecha válida',
+                      min: 'Fecha no corresponde'
+                  },
+              }//messages
+          }); //$('#mi-formulario').validate
+      }); //function
+        function CambiarMayusculas()
+        {
+            var a = document.getElementById('nom');
+            a.value = a.value.toUpperCase();
+        }
+        function CambiaColor(a)
+        {
+            a.style.background = "lightgreen";
+        }
+        function Mover(obj)
+        {
+            obj.style.background="green";
+           
+        }
+
+        function MoverFuera(obj)
+        {
+            obj.style.background= "yellow";
+            
+        }
+        
+    </script>
+
+
+    
+</head>
+<body style="background-color:blanchedalmond;">
+    
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        {% load static %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#opciones">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- logo -->
+            <a class="navbar-brand" href="#">
+              <img src="{% static 'img/logo.jpg' %}" width="30" height="30" alt="">
+            </a>
+            
+            <!-- enlaces -->
+            <div class="collapse navbar-collapse" id="opciones">   
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'home' %}">Principal</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'quienes_somos' %}">Quiénes Somos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'catalogo' %}">Catálogo</a>
+                </li>     
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'registro' %}">Registrarse</a>
+                  </li>    
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'api' %}">Api</a>
+                </li>
+                <li class="nav-item">
+                  {% if user.is_authenticated %}
+                    <a href="{% url 'mostrar' %}" class="nav-link">Mostrar Clientes</a>
+                    <li>
+                    <a href="{% url 'mostrar2' %}" class="nav-link">Mostrar Productos</a> 
+                    </li>
+                    <li>
+                      <a href="{% url 'logout' %}" class="nav-link">Cerrar Sesión</a>
+                    </li>
+                    <li>
+                      <a href="#">Bienvenid@ {{user.username}}</a>
+                    </li>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Iniciar Sesión</a>
+                {% endif %}
+              </li>
+              </ul>
+            </div>
+          </nav>
+    <br>
+        <div class="container-fluid">
+            <div class="col-lg-1""></div>
+            <form id="mi-formulario" action="registro.html" method="post" name="datos" 
+            onsubmit="return validacion()" class="col-lg-6 newsletter">
+            <div class=" mb-4">
+                <h2 class="h2 mb-2 font-weight-normal" onmouseover="style.color = 'violet'" onmouseout="style.color= 'palegreen'"><strong> Registro PetShop</strong></h2>
+                <p class="lead">Registrate para hacerte socio de nuestra tienda virtual, y estarás colaborando con aquellos 
+                    animales que carecen de cuidados indispensables.
+                </p>
+                <div class="form-label-group">
+                    <label for="nom">Nombre Completo: </label>
+                    <input type="text" class="form-control" id="nom" name="nom" placeholder="Ingrese su Nombre"  
+                    onchange="CambiarMayusculas()" required >
+                </div>
+                <div class="form-label-group">
+                    <label for="rut">Rut: </label>
+                    <input type="text" class="form-control" id="rut" name="rut" minlength="9"  placeholder="Ej: 00.000.000-X"
+                     onfocus="CambiaColor(this)" required>
+                    </div>
+                    
+                <div class="form-label-group">
+                    <label>Correo electrónico: </label>
+                    <input type="text" id="email" name="email"  placeholder="Ej: nombre@dominio.cl" class="form-control" required >
+                </div>
+
+                <div class="form-label-group">
+                <label>Celular: </label>
+                <input type="text" id="fono" name="fono" minlength="9"  placeholder="Ingrese su Celular" class="form-control" required>
+                </div>
+
+                <div class="form-label-group">
+                <label for="opcion">Región</label>
+                    <select id="opcion" name="opcion" class="form-control" required>
+                        <option value="">- Selecciona una opción -</option>
+                        <option value="1">I. Arica y parinacota</option>
+                        <option value="2">II. Antofagasta</option>
+                        <option value="3">III. Atacama y Coquimbo </option>
+                        <option value="1">IV. Valparaíso</option>
+                        <option value="1">V. O'higgins</option>
+                        <option value="1">VI. Maule</option>
+                        <option value="1">VII. Nuble, Biobío y La Araucanía</option>
+                        <option value="1">IX. Los Ríos y Los Lagos</option>
+                        <option value="1">X. Los Lagos y Aysén</option>
+                        <option value="1">XI. Magallanes</option>
+                        <option value="1">Zona Metropolitana de Santiago</option>
+                    </select>
+                </div>
+
+                <div class="form-label-group">
+                    <label>Dirección: </label>
+                    <input type="text" id="ubi" name="ubi" minlength="9"  placeholder="Ingrese su Dirección " class="form-control" required >
+                </div>
+            
+                <div class="form-label-group">
+                <label>Fecha de Nacimiento: </label>
+                <input type="date" id="fecha" name="fecha" min="2018-01-01"  class="form-control" required>
+                </div>
+        
+                <div class="form-label-group">
+                <label>Contraseña:</label>
+                <input type="password" id="password" name="password"  minlength="8" class="form-control" required>
+                </div>
+                <hr>
+
+
+                <input id="btnNewsletter" class="btn btn-lg btn-warning btn-block" onmouseover="Mover(this)"
+                 onmouseout="MoverFuera(this)" onClick="ConfirmarEnvio(this.form)" type="submit" value="¡Enviar!">
+            </div>
+            </form>
+        </div>
+    <br>
+    <br>
+    <footer style="background-color:darkgrey;">
+        <div class="row col-12">
+            <div class="col-lg-2">
+                <img src="{% static 'img/logo.jpg' %}" alt="logoPetShop" width="60px">
+            </div>
+            <div class="col-lg-1">
+                <a href="{% url 'home' %}" id="linkFooter"><strong>Inicio</strong></a>
+            </div>
+            <div class="col-lg-1">
+               <a href="{% url 'catalogo' %}"> <strong>Catálogo</strong>
+            </div>
+            <div class="col-lg-2">
+                <a href="{% url 'quienes_somos' %}" id="linkFooter"><strong>Formación</strong></a>
+            </div>
+
+            <div class="col-lg-2">
+                <strong>Síguenos</strong>
+                <br><br>
+                <div class="row">
+                    <img src="{% static 'img/facebook.png' %}" alt="" width="30px" height="30px"
+                        style=" margin-left: 15px;">
+                    <img src="{% static 'img/twitter.png' %}" alt="" width="30px" height="30px" style=" margin-left: 10px;">
+                    <img src="{% static 'img/instagram.png' %}" alt="" width="30px" height="30px" style=" margin-left: 10px;">
+
+                </div>
+            </div>
+
+
+            <div class="col-lg-3">
+
+                <strong>Contacto</strong>
+                  <br><br>
+                  <div class="row">
+                      <img src="{% static 'img/ubicacion.png' %}" alt="" width="20px" height="20px"
+                          style="margin-right: 10px; margin-left: 15px;">
+                      <p>Av. Esq. Blanca 501, Maipú</p>
+                  </div>
+                  <div class="row">
+                      <img src="{% static 'img/fono.png' %}" alt="" width="20px" height="20px"
+                          style="margin-right: 10px; margin-left: 15px;">
+                      <p>227845231</p>
+                  </div>
+                  <div class="row">
+                      <img src="{% static 'img/email.png' %}" alt="" width="20px" height="20px"
+                          style="margin-right: 10px; margin-left: 15px;">
+                      <p>PetShop@gmail.cl</p>
+                  </div>
+                <br><br><br>
+
+                <br>
+                <p>&copy; PetShop - 2022</p>
+            </div>
+        </div>
+    </footer>
+    <!-- script que permite mostrar/ocultar navbar haciendo scroll -->
+<script type="text/javascript">
+let ubicacionInicial = window.pageYOffset;
+window.onscroll = function () {
+    let ubicacionPosterior = window.pageYOffset;
+    if (ubicacionInicial >= ubicacionPosterior) {
+        document.getElementById("barraNav").style.top = "0";
+    }
+    else {
+        document.getElementById("barraNav").style.top = "-70px";
+    }
+    ubicacionInicial = ubicacionPosterior
+}
+</script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  
+</body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/validacion.js"></script>
+</html>
